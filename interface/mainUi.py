@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'e:\SOFTWARE\PythonProjects\todoList\interface\main.ui'
+# Form implementation generated from reading ui file 'c:\SOFTWARE\Programming\todoList\todoList\interface\main.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -66,7 +66,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.AddButton.sizePolicy().hasHeightForWidth())
         self.AddButton.setSizePolicy(sizePolicy)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("e:\\SOFTWARE\\PythonProjects\\todoList\\interface\\../assets/edit_add.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("c:\\SOFTWARE\\Programming\\todoList\\todoList\\interface\\../assets/edit_add.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.AddButton.setIcon(icon)
         self.AddButton.setObjectName("AddButton")
         self.verticalLayout.addWidget(self.AddButton)
@@ -77,7 +77,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.RemoveButton.sizePolicy().hasHeightForWidth())
         self.RemoveButton.setSizePolicy(sizePolicy)
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("e:\\SOFTWARE\\PythonProjects\\todoList\\interface\\../assets/edit_remove.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("c:\\SOFTWARE\\Programming\\todoList\\todoList\\interface\\../assets/edit_remove.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.RemoveButton.setIcon(icon1)
         self.RemoveButton.setObjectName("RemoveButton")
         self.verticalLayout.addWidget(self.RemoveButton)
@@ -88,14 +88,14 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.MarkButton.sizePolicy().hasHeightForWidth())
         self.MarkButton.setSizePolicy(sizePolicy)
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("e:\\SOFTWARE\\PythonProjects\\todoList\\interface\\../assets/checkbox.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon2.addPixmap(QtGui.QPixmap("c:\\SOFTWARE\\Programming\\todoList\\todoList\\interface\\../assets/checkbox.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.MarkButton.setIcon(icon2)
         self.MarkButton.setObjectName("MarkButton")
         self.verticalLayout.addWidget(self.MarkButton)
         self.gridLayout.addWidget(self.ControlPanel, 0, 2, 1, 1)
         MainWindow.setCentralWidget(self.MainWidget)
         self.MenuBar = QtWidgets.QMenuBar(MainWindow)
-        self.MenuBar.setGeometry(QtCore.QRect(0, 0, 644, 21))
+        self.MenuBar.setGeometry(QtCore.QRect(0, 0, 644, 26))
         self.MenuBar.setObjectName("MenuBar")
         self.menuList = QtWidgets.QMenu(self.MenuBar)
         self.menuList.setObjectName("menuList")
