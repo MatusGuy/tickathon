@@ -11,26 +11,15 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Tickathon</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../assets/tickathon.png</normaloff>../assets/tickathon.png</iconset>
   </property>
   <widget class="QWidget" name="MainWidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="2">
-     <widget class="QWidget" name="ControlPanel" native="true">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16777214</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QPushButton{
+   <property name="styleSheet">
+    <string notr="true">QPushButton{
 	image: url()
 }
 
@@ -42,104 +31,106 @@ QPushButton#RemoveButton:hover{
 }
 QPushButton#MarkButton:hover{
 	background-color: rgb(59, 168, 255)
+}
+QPushButton#ClearButton:hover{
+	background-color: rgb(255, 101, 0)
 }</string>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="4">
+     <widget class="QPushButton" name="AddButton">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>1</verstretch>
+       </sizepolicy>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <property name="sizeConstraint">
-        <enum>QLayout::SetFixedSize</enum>
-       </property>
-       <property name="leftMargin">
-        <number>4</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>4</number>
-       </property>
-       <property name="bottomMargin">
-        <number>4</number>
-       </property>
-       <item>
-        <widget class="QPushButton" name="AddButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Add</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>../assets/edit_add.png</normaloff>../assets/edit_add.png</iconset>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="RemoveButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Remove</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>../assets/edit_remove.png</normaloff>../assets/edit_remove.png</iconset>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="MarkButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Toggle mark</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>../assets/checkbox.png</normaloff>../assets/checkbox.png</iconset>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>45</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
+      <property name="text">
+       <string>Add</string>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>../assets/edit_add.png</normaloff>../assets/edit_add.png</iconset>
+      </property>
      </widget>
     </item>
-    <item row="0" column="0" rowspan="3" colspan="2">
+    <item row="1" column="4">
+     <widget class="QPushButton" name="RemoveButton">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>1</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Remove</string>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>../assets/edit_remove.png</normaloff>../assets/edit_remove.png</iconset>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="4">
+     <widget class="QPushButton" name="MarkButton">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>1</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Toggle mark</string>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>../assets/checkbox.png</normaloff>../assets/checkbox.png</iconset>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="4" rowspan="2">
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="3" column="4">
+     <widget class="QPushButton" name="ClearButton">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>1</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Clear</string>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>../assets/logout.png</normaloff>../assets/logout.png</iconset>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0" rowspan="6" colspan="4">
      <widget class="QListWidget" name="List">
-      <property name="editTriggers">
-       <set>QAbstractItemView::AllEditTriggers</set>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>1</verstretch>
+       </sizepolicy>
       </property>
       <property name="dragEnabled">
        <bool>true</bool>
       </property>
-      <property name="dragDropOverwriteMode">
-       <bool>true</bool>
-      </property>
       <property name="dragDropMode">
-       <enum>QAbstractItemView::DragDrop</enum>
+       <enum>QAbstractItemView::DragOnly</enum>
       </property>
       <property name="defaultDropAction">
        <enum>Qt::MoveAction</enum>
@@ -162,41 +153,55 @@ QPushButton#MarkButton:hover{
       <property name="wordWrap">
        <bool>true</bool>
       </property>
-      <item>
-       <property name="text">
-        <string>item</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>New Item</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>New Item</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>New Item</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>New Item</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>New Item</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>New Item</string>
-       </property>
-      </item>
+     </widget>
+    </item>
+    <item row="6" column="0" colspan="5">
+     <widget class="QWidget" name="widget" native="true">
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="1" column="0">
+        <widget class="QLabel" name="CreationTimeLabel">
+         <property name="text">
+          <string>Creation time:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="SelectedLabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Selected:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" colspan="2">
+        <widget class="QDateTimeEdit" name="ItemCreationTime">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+         <property name="buttonSymbols">
+          <enum>QAbstractSpinBox::NoButtons</enum>
+         </property>
+         <property name="timeSpec">
+          <enum>Qt::LocalTime</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" colspan="2">
+        <widget class="QSpinBox" name="SelectedCount">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+         <property name="buttonSymbols">
+          <enum>QAbstractSpinBox::NoButtons</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
    </layout>
@@ -217,6 +222,8 @@ QPushButton#MarkButton:hover{
     <addaction name="AddAction"/>
     <addaction name="RemoveAction"/>
     <addaction name="MarkAction"/>
+    <addaction name="separator"/>
+    <addaction name="ClearAction"/>
    </widget>
    <addaction name="menuList"/>
   </widget>
@@ -227,7 +234,7 @@ QPushButton#MarkButton:hover{
      <normaloff>../assets/edit_add.png</normaloff>../assets/edit_add.png</iconset>
    </property>
    <property name="text">
-    <string>Add item</string>
+    <string>Add item(s)</string>
    </property>
    <property name="shortcut">
     <string>F1</string>
@@ -242,7 +249,7 @@ QPushButton#MarkButton:hover{
      <normaloff>../assets/edit_remove.png</normaloff>../assets/edit_remove.png</iconset>
    </property>
    <property name="text">
-    <string>Remove item</string>
+    <string>Remove item(s)</string>
    </property>
    <property name="shortcut">
     <string>F2</string>
@@ -254,7 +261,7 @@ QPushButton#MarkButton:hover{
      <normaloff>../assets/checkbox.png</normaloff>../assets/checkbox.png</iconset>
    </property>
    <property name="text">
-    <string>Toggle mark item</string>
+    <string>Toggle mark item(s)</string>
    </property>
    <property name="toolTip">
     <string>Mark item</string>
@@ -263,9 +270,19 @@ QPushButton#MarkButton:hover{
     <string>Space</string>
    </property>
   </action>
+  <action name="ClearAction">
+   <property name="icon">
+    <iconset>
+     <normaloff>../assets/logout.png</normaloff>../assets/logout.png</iconset>
+   </property>
+   <property name="text">
+    <string>Clear list</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+F2</string>
+   </property>
+  </action>
  </widget>
- <resources>
-  <include location="resources/icons.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

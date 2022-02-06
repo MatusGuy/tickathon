@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ToolBox</class>
+ <widget class="QToolBox" name="ToolBox">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>ToolBox</string>
+  </property>
+  <widget class="QWidget" name="Undone">
+   <attribute name="icon">
+    <iconset>
+     <normaloff>../assets/uncheckbox.png</normaloff>../assets/uncheckbox.png</iconset>
+   </attribute>
+   <attribute name="label">
+    <string>Unmarked items</string>
+   </attribute>
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QListWidget" name="UndoneList"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="Done">
+   <attribute name="icon">
+    <iconset>
+     <normaloff>../assets/checkbox.png</normaloff>../assets/checkbox.png</iconset>
+   </attribute>
+   <attribute name="label">
+    <string>Marked items</string>
+   </attribute>
+   <layout class="QGridLayout" name="gridLayout_2">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QListWidget" name="DoneList"/>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
