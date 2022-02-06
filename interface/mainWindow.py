@@ -2,9 +2,12 @@ from sys import path as sp
 sp.insert(1,'.')
 
 from PyQt5.QtWidgets import QListWidgetItem,QMainWindow,QApplication, QInputDialog, QMessageBox
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QCursor
 from PyQt5.QtCore import QObject, Qt, QModelIndex, QDateTime, QMimeData
+
 from interface.mainUi import Ui_MainWindow as ui
+from components.prefMng import PreferencesManager
+
 from dist import pydist as pd
 
 class ListWidgetItem(QListWidgetItem,QObject):
@@ -25,10 +28,9 @@ class ListWidgetItem(QListWidgetItem,QObject):
 class MainWindow(ui,QObject):
     window = QMainWindow
     app = QApplication
+    prefMng = PreferencesManager("items.json")
 
     items = []
-
-    def SetOldItems(self,value:list[QListWidgetItem]): self.olditems = value
 
     def __init__(self,window:QMainWindow,app:QApplication):
         self.window = window
@@ -38,6 +40,7 @@ class MainWindow(ui,QObject):
         super().__init__()
         super().setupUi(self.window)
         self.InitIcons()
+        self.InitListContextMenu()
         self.DisableItemCreationTimeLabel()
 
         self.AddAction.triggered.connect(self.AddItem)
@@ -51,8 +54,9 @@ class MainWindow(ui,QObject):
         self.ClearButton.pressed.connect(self.ClearAction.trigger)
 
         self.List.itemSelectionChanged.connect(lambda: self.UpdateItemInfo(self.List.selectedIndexes()))
-        #self.List.itemChanged.connect(self.PreventRepetition)
-        #self.List.itemDoubleClicked.connect(lambda: self.SetOldItems(self.GetItems()))
+    
+    def InitListContextMenu(self):
+        self.List.customContextMenuRequested.connect(lambda: self.ListMenu.exec_(QCursor.pos()))
     
     def InitIcons(self):
         self.AddButton.setIcon(QIcon(pd.__PyDist__._WorkDir+"assets/edit_add.png"))
@@ -75,9 +79,10 @@ class MainWindow(ui,QObject):
         self.ItemCreationTime.setDateTime(date)
         self.ItemCreationTime.setEnabled(True)
     
+    def ClearSelection(self):
+        for sItem in self.List.selectedItems(): sItem.setSelected(False)
+    
     def UpdateItemInfo(self,selectedItems:list[ListWidgetItem|QListWidgetItem|QModelIndex]):
-        print(selectedItems)
-
         self.SelectedCount.setValue(len(selectedItems))
 
         if len(selectedItems)==1:
@@ -112,6 +117,8 @@ class MainWindow(ui,QObject):
             Qt.ItemFlag.ItemIsSelectable|
             Qt.ItemFlag.ItemIsDragEnabled
         )
+
+        self.ClearSelection()
         a.item.setSelected(True)
 
         a.object.setProperty("CREATION_TIME",QDateTime.currentDateTime())
@@ -124,28 +131,47 @@ class MainWindow(ui,QObject):
         for item in items:
             item.setCheckState(Qt.CheckState.Unchecked if self.CheckStateBool(item.checkState()) else Qt.CheckState.Checked)
     
+    def RemoveItem(self,row:int):
+        self.ClearSelection()
+        self.items[row].object.setProperty("CREATION_TIME",None)
+        self.items.pop(row)
+        self.List.takeItem(row)
+
     def RemoveItems(self,items:list[QModelIndex]):
         if len(items)>0:
             items.reverse()
-            for index in items:
-                row = index.row()
-                self.items[row].object.setProperty("CREATION_TIME",None)
-                self.items.pop(row)
-                self.List.takeItem(row)
+            for index in items: self.RemoveItem(index.row())
         else:
-            resp = QInputDialog.getInt(
-                self.window,
-                "Remove item",
-                "Input the item's position to delete the chosen item:",
-                min=1
-            )[0]
-            try:
-                self.items[resp-1].object.setProperty("CREATION_TIME",None)
-                self.items.pop(resp-1)
-                self.List.takeItem(resp-1)
-            except IndexError:
-                QMessageBox(
-                    QIcon(pd.__PyDist__._WorkDir+"assets/tickathon.png"),
+            if self.List.count()>0:
+                resp = QInputDialog.getInt(
+                    self.window,
+                    "Remove item",
+                    "Input the item's position to delete the chosen item:",
+                    value=1,
+                    min=1,
+                    max=self.List.count()
+                )[0]-1
+
+                try: self.RemoveItem(resp)
+                except IndexError:
+                    dialog = QMessageBox(
+                        QMessageBox.Icon.Critical,
+                        "Error",
+                        "Couldn't find any items with that position.",
+                        QMessageBox.StandardButton.Ok,
+                    )
+                    dialog.setWindowIcon(QIcon(pd.__PyDist__._WorkDir+"assets/tickathon.png"))
+                    dialog.exec_()
+            else:
+                dialog = QMessageBox(
+                    QMessageBox.Icon.Critical,
                     "Error",
-                    "Couldn't find any items with that position"
-                ).exec_()
+                    "List is empty.",
+                    QMessageBox.StandardButton.Ok,
+                )
+                dialog.setWindowIcon(QIcon(pd.__PyDist__._WorkDir+"assets/tickathon.png"))
+                dialog.exec_()
+    
+    def OnAppQuit(self):
+        if pd.__PyDist__._isBundle:
+            self.prefMng.SetSetting(["items",])
