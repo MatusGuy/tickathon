@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\SOFTWARE\Programming\todoList\interface\activeItems.ui'
+# Form implementation generated from reading ui file 'e:\SOFTWARE\PythonProjects\todoList\interface\activeItems.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -16,6 +16,7 @@ class Ui_ToolBox(object):
         ToolBox.setObjectName("ToolBox")
         ToolBox.resize(400, 300)
         self.Undone = QtWidgets.QWidget()
+        self.Undone.setGeometry(QtCore.QRect(0, 0, 400, 246))
         self.Undone.setObjectName("Undone")
         self.gridLayout = QtWidgets.QGridLayout(self.Undone)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
@@ -23,10 +24,9 @@ class Ui_ToolBox(object):
         self.UndoneList = QtWidgets.QListWidget(self.Undone)
         self.UndoneList.setObjectName("UndoneList")
         self.gridLayout.addWidget(self.UndoneList, 0, 0, 1, 1)
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("c:\\SOFTWARE\\Programming\\todoList\\interface\\../assets/uncheckbox.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        ToolBox.addItem(self.Undone, icon, "")
+        ToolBox.addItem(self.Undone, "")
         self.Done = QtWidgets.QWidget()
+        self.Done.setGeometry(QtCore.QRect(0, 0, 400, 246))
         self.Done.setObjectName("Done")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.Done)
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -34,9 +34,7 @@ class Ui_ToolBox(object):
         self.DoneList = QtWidgets.QListWidget(self.Done)
         self.DoneList.setObjectName("DoneList")
         self.gridLayout_2.addWidget(self.DoneList, 0, 0, 1, 1)
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("c:\\SOFTWARE\\Programming\\todoList\\interface\\../assets/checkbox.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        ToolBox.addItem(self.Done, icon1, "")
+        ToolBox.addItem(self.Done, "")
 
         self.retranslateUi(ToolBox)
         QtCore.QMetaObject.connectSlotsByName(ToolBox)

@@ -3,10 +3,12 @@ sp.insert(1,'.')
 
 from PyQt5.QtWidgets import QListWidgetItem,QMainWindow,QApplication, QInputDialog, QMessageBox
 from PyQt5.QtGui import QIcon, QCursor
-from PyQt5.QtCore import QObject, Qt, QModelIndex, QDateTime, QMimeData
+from PyQt5.QtCore import QObject, Qt, QModelIndex, QDateTime
 
 from interface.mainUi import Ui_MainWindow as ui
 from components.prefMng import PreferencesManager
+from interface.aboutWindow import AboutDialog as aboutUi
+from interface.activeItemsDialog import ActiveItemsDialog as aidialog
 
 from dist import pydist as pd
 
@@ -32,7 +34,9 @@ class ListWidgetItem(QListWidgetItem,QObject):
 class MainWindow(ui,QObject):
     window = QMainWindow
     app = QApplication
+    about = aboutUi
     prefMng = PreferencesManager("items.json")
+    AIDialog = aidialog
 
     items = []
 
@@ -41,11 +45,17 @@ class MainWindow(ui,QObject):
         self.app = app
         self.app.setStyle("Fusion")
 
+        self.about = aboutUi(
+            pd.__PyDist__.GetAppVersion(),
+            windowIcon=self.window.windowIcon()
+        )
+
         super().__init__()
         super().setupUi(self.window)
         self.InitIcons()
         self.InitListContextMenu()
         self.DisableItemCreationTimeLabel()
+        self.AIDialog = aidialog()
 
         self.AddAction.triggered.connect(self.AddItem)
         self.RemoveAction.triggered.connect(lambda: self.RemoveItems(self.List.selectedIndexes()))
@@ -58,6 +68,12 @@ class MainWindow(ui,QObject):
         self.ClearButton.pressed.connect(self.ClearAction.trigger)
 
         self.List.itemSelectionChanged.connect(lambda: self.UpdateItemInfo(self.List.selectedIndexes()))
+
+        self.AboutAction.triggered.connect(self.about.Execute)
+
+        self.ActiveItems.triggered.connect(lambda: self.AIDialog.Open(self.GetItems()))
+
+        self.app.aboutToQuit.connect(self.OnAppQuit)
     
     def InitListContextMenu(self):
         self.List.customContextMenuRequested.connect(lambda: self.ListMenu.exec_(QCursor.pos()))
@@ -74,6 +90,10 @@ class MainWindow(ui,QObject):
 
         self.ClearButton.setIcon(QIcon(pd.__PyDist__._WorkDir+"assets/logout.png"))
         self.ClearAction.setIcon(QIcon(pd.__PyDist__._WorkDir+"assets/logout.png"))
+
+        self.AboutAction.setIcon(QIcon(pd.__PyDist__._WorkDir+"assets/info.png"))
+
+        self.ActiveItems.setIcon(QIcon(pd.__PyDist__._WorkDir+"assets/view_text.png"))
 
         self.window.setWindowIcon(QIcon(pd.__PyDist__._WorkDir+"assets/tickathon.png"))
     
@@ -106,7 +126,11 @@ class MainWindow(ui,QObject):
             self.EnableItemCreationTimeLabel(ctime)
         else: self.DisableItemCreationTimeLabel()
     
-    def GetItems(self) -> list[QListWidgetItem]: return self.List.items(QMimeData())
+    def GetItems(self) -> list[QListWidgetItem]:
+        resp = []
+        for index in range(self.List.count()):
+            resp.append(self.List.item(index))
+        return resp
     def GetNames(self) -> list[str]:
         resp = []
         for item in self.GetItems():
@@ -136,6 +160,7 @@ class MainWindow(ui,QObject):
         a.object.setProperty("CREATION_TIME",QDateTime.currentDateTime())
 
         self.List.addItem(a.item)
+        print(self.GetItems())
     
     def CheckStateBool(self,checkState:Qt.CheckState|int) -> bool: return checkState == Qt.CheckState.Checked
     
@@ -189,11 +214,11 @@ class MainWindow(ui,QObject):
                         "name": item.text(),
                         "checked": self.CheckStateBool(item.checkState()),
                         "date": {
-                            "year": str(date.date().year()),
-                            "month": str(date.date().month()),
-                            "day": str(date.date().day()),
-                            "hour": str(date.time().hour()),
-                            "minute": str(date.time().minute()),
+                            "year": date.date().year(),
+                            "month": date.date().month(),
+                            "day": date.date().day(),
+                            "hour": date.time().hour(),
+                            "minute": date.time().minute(),
                         }
                     }
                 )

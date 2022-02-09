@@ -14,10 +14,14 @@
    <string>ToolBox</string>
   </property>
   <widget class="QWidget" name="Undone">
-   <attribute name="icon">
-    <iconset>
-     <normaloff>../assets/uncheckbox.png</normaloff>../assets/uncheckbox.png</iconset>
-   </attribute>
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>400</width>
+     <height>246</height>
+    </rect>
+   </property>
    <attribute name="label">
     <string>Unmarked items</string>
    </attribute>
@@ -40,10 +44,14 @@
    </layout>
   </widget>
   <widget class="QWidget" name="Done">
-   <attribute name="icon">
-    <iconset>
-     <normaloff>../assets/checkbox.png</normaloff>../assets/checkbox.png</iconset>
-   </attribute>
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>400</width>
+     <height>246</height>
+    </rect>
+   </property>
    <attribute name="label">
     <string>Marked items</string>
    </attribute>
