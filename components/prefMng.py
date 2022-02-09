@@ -6,7 +6,10 @@ from dist import pydist as pd
 class PreferencesManager(object):
 
     settings=None
-    default_data={}
+    default_data={
+        "version": 1,
+        "items": []
+    }
 
     filename=None
     isPendingChanges=False

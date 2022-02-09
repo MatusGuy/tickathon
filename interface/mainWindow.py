@@ -10,6 +10,10 @@ from components.prefMng import PreferencesManager
 
 from dist import pydist as pd
 
+def DestroyQObject(object:QObject):
+    object.setParent(None)
+    object.deleteLater()
+
 class ListWidgetItem(QListWidgetItem,QObject):
     item = QListWidgetItem
     object = QObject
@@ -82,8 +86,16 @@ class MainWindow(ui,QObject):
     def ClearSelection(self):
         for sItem in self.List.selectedItems(): sItem.setSelected(False)
     
-    def UpdateItemInfo(self,selectedItems:list[ListWidgetItem|QListWidgetItem|QModelIndex]):
+    def UpdateItemInfo(self,selectedItems:list[QModelIndex]):
         self.SelectedCount.setValue(len(selectedItems))
+
+        if len(selectedItems)>=1:
+            self.IndexesOutput.setEnabled(True)
+            stringIndexes = []
+            for index in selectedItems: stringIndexes.append(index.row()+1)
+            self.IndexesOutput.setText(str(stringIndexes))
+        else:
+            self.IndexesOutput.setDisabled(False)
 
         if len(selectedItems)==1:
             ctime = self.items[selectedItems[0].row()].object.property("CREATION_TIME")
@@ -143,35 +155,61 @@ class MainWindow(ui,QObject):
             for index in items: self.RemoveItem(index.row())
         else:
             if self.List.count()>0:
-                resp = QInputDialog.getInt(
+                resp,button = QInputDialog.getText(
                     self.window,
                     "Remove item",
-                    "Input the item's position to delete the chosen item:",
-                    value=1,
-                    min=1,
-                    max=self.List.count()
-                )[0]-1
-
-                try: self.RemoveItem(resp)
-                except IndexError:
-                    dialog = QMessageBox(
-                        QMessageBox.Icon.Critical,
-                        "Error",
-                        "Couldn't find any items with that position.",
-                        QMessageBox.StandardButton.Ok,
-                    )
-                    dialog.setWindowIcon(QIcon(pd.__PyDist__._WorkDir+"assets/tickathon.png"))
-                    dialog.exec_()
-            else:
-                dialog = QMessageBox(
-                    QMessageBox.Icon.Critical,
-                    "Error",
-                    "List is empty.",
-                    QMessageBox.StandardButton.Ok,
+                    "Input the item's position to remove the chosen item:\nSeperate the values by commas (,) to remove multiple items"
                 )
-                dialog.setWindowIcon(QIcon(pd.__PyDist__._WorkDir+"assets/tickathon.png"))
-                dialog.exec_()
+
+                try:
+                    rows = resp.split(",")
+                    for row in rows: rows[rows.index(row)] = int(row)-1
+                    rows.sort()
+                    rows.reverse()
+
+                    print(rows)
+
+                    for row in rows: self.RemoveItem(row)
+
+                except IndexError as err:
+                    self.ErrorDialog("Couldn't find any items with those positions.")
+
+                except ValueError as err:
+                    if button==QInputDialog.DialogCode.Accepted:
+                        self.ErrorDialog("Those aren't numbers.\nPlease make sure you didn't include any whitespaces.")
+            else:
+                self.ErrorDialog("List is empty.")
     
     def OnAppQuit(self):
         if pd.__PyDist__._isBundle:
-            self.prefMng.SetSetting(["items",])
+            for item in self.GetItems():
+                date = self.items[item].object.property("CREATION_TIME")
+                self.prefMng.SetSetting(["items",self.List.indexFromItem(item).row()],
+                    {
+                        "name": item.text(),
+                        "checked": self.CheckStateBool(item.checkState()),
+                        "date": {
+                            "year": str(date.date().year()),
+                            "month": str(date.date().month()),
+                            "day": str(date.date().day()),
+                            "hour": str(date.time().hour()),
+                            "minute": str(date.time().minute()),
+                        }
+                    }
+                )
+    
+    def ErrorDialog(self,errormsg:str,returnObject:bool=True) -> QMessageBox.StandardButton|int|QMessageBox:
+        dialog = QMessageBox(
+            QMessageBox.Icon.Critical,
+            "Error",
+            errormsg,
+            QMessageBox.StandardButton.Ok,
+            self.window
+        )
+        dialog.setWindowIcon(self.window.windowIcon())
+        resp = None
+        if returnObject: resp = dialog.exec_()
+
+        if returnObject: DestroyQObject(dialog)
+
+        return resp if returnObject else dialog

@@ -161,13 +161,6 @@ QPushButton#ClearButton:hover{
     <item row="6" column="0" colspan="5">
      <widget class="QWidget" name="widget" native="true">
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="1" column="0">
-        <widget class="QLabel" name="CreationTimeLabel">
-         <property name="text">
-          <string>Creation time:</string>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="SelectedLabel">
          <property name="sizePolicy">
@@ -181,8 +174,18 @@ QPushButton#ClearButton:hover{
          </property>
         </widget>
        </item>
-       <item row="1" column="1" colspan="2">
+       <item row="3" column="0">
+        <widget class="QLabel" name="CreationTimeLabel">
+         <property name="text">
+          <string>Creation time:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1" colspan="2">
         <widget class="QDateTimeEdit" name="ItemCreationTime">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="readOnly">
           <bool>true</bool>
          </property>
@@ -201,6 +204,30 @@ QPushButton#ClearButton:hover{
          </property>
          <property name="buttonSymbols">
           <enum>QAbstractSpinBox::NoButtons</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="3">
+        <widget class="Line" name="hSep1">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="IndexesLabel">
+         <property name="text">
+          <string>Indexes in list:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1" colspan="2">
+        <widget class="QLineEdit" name="IndexesOutput">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
