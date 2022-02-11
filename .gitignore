@@ -1,3 +1,4 @@
 *.pyc
 .env/*
 assets/archive/otherIcons/*
+build/*

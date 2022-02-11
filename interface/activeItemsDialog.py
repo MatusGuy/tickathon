@@ -18,8 +18,10 @@ class ActiveItemsDialog(QToolBox):
 
         self.setWindowIcon(QIcon(pd.__PyDist__._WorkDir+"assets/tickathon.png"))
         self.setWindowTitle("Active items")
-    
-    def Open(self,full:list[QListWidgetItem]):
+
+    def List2ActiveItems(self,full:list[QListWidgetItem]):
+        self.Mainui.DoneList.clear()
+        self.Mainui.UndoneList.clear()
         for item in full:
             newitem = item.clone()
             newitem.setText(f"({full.index(item)+1}) "+item.text())
@@ -28,6 +30,9 @@ class ActiveItemsDialog(QToolBox):
                 self.Mainui.DoneList.addItem(newitem)
             else:
                 self.Mainui.UndoneList.addItem(newitem)
+
+    def Open(self,full:list[QListWidgetItem]):
+        self.List2ActiveItems(full)
         self.show()
     
     def Close(self):

@@ -3,7 +3,7 @@ sp.insert(1,'.')
 
 from PyQt5.QtWidgets import QListWidgetItem,QMainWindow,QApplication, QInputDialog, QMessageBox
 from PyQt5.QtGui import QIcon, QCursor
-from PyQt5.QtCore import QObject, Qt, QModelIndex, QDateTime
+from PyQt5.QtCore import QObject, Qt, QModelIndex, QDateTime, pyqtSignal as QSignal
 
 from interface.mainUi import Ui_MainWindow as ui
 from components.prefMng import PreferencesManager
@@ -40,6 +40,8 @@ class MainWindow(ui,QObject):
 
     items = []
 
+    itemsChanged = QSignal(list)
+
     def __init__(self,window:QMainWindow,app:QApplication):
         self.window = window
         self.app = app
@@ -60,7 +62,7 @@ class MainWindow(ui,QObject):
         self.AddAction.triggered.connect(self.AddItem)
         self.RemoveAction.triggered.connect(lambda: self.RemoveItems(self.List.selectedIndexes()))
         self.MarkAction.triggered.connect(lambda: self.CheckItems(self.List.selectedItems()))
-        self.ClearAction.triggered.connect(self.List.clear)
+        self.ClearAction.triggered.connect(lambda: (self.List.clear(),self.itemsChanged.emit(self.GetItems())))
 
         self.AddButton.pressed.connect(self.AddAction.trigger)
         self.RemoveButton.pressed.connect(self.RemoveAction.trigger)
@@ -68,6 +70,7 @@ class MainWindow(ui,QObject):
         self.ClearButton.pressed.connect(self.ClearAction.trigger)
 
         self.List.itemSelectionChanged.connect(lambda: self.UpdateItemInfo(self.List.selectedIndexes()))
+        self.itemsChanged.connect(self.AIDialog.List2ActiveItems)
 
         self.AboutAction.triggered.connect(self.about.Execute)
 
@@ -151,7 +154,8 @@ class MainWindow(ui,QObject):
             Qt.ItemFlag.ItemIsEnabled|
             Qt.ItemFlag.ItemIsUserCheckable|
             Qt.ItemFlag.ItemIsSelectable|
-            Qt.ItemFlag.ItemIsDragEnabled
+            Qt.ItemFlag.ItemIsDragEnabled|
+            Qt.ItemFlag.ItemIsDropEnabled
         )
 
         self.ClearSelection()
@@ -160,19 +164,48 @@ class MainWindow(ui,QObject):
         a.object.setProperty("CREATION_TIME",QDateTime.currentDateTime())
 
         self.List.addItem(a.item)
-        print(self.GetItems())
+        self.itemsChanged.emit(self.GetItems())
     
     def CheckStateBool(self,checkState:Qt.CheckState|int) -> bool: return checkState == Qt.CheckState.Checked
     
-    def CheckItems (self,items:list[QListWidgetItem]):
-        for item in items:
-            item.setCheckState(Qt.CheckState.Unchecked if self.CheckStateBool(item.checkState()) else Qt.CheckState.Checked)
+    def CheckItem(self,item:QListWidgetItem):
+        item.setCheckState(Qt.CheckState.Unchecked if self.CheckStateBool(item.checkState()) else Qt.CheckState.Checked)
+        self.itemsChanged.emit(self.GetItems())
+
+    def CheckItems(self,items:list[QListWidgetItem]):
+        if len(items)>0:
+            for item in items: self.CheckItem(item)
+        else:
+            if self.List.count()>0:
+                resp,button = QInputDialog.getText(
+                    self.window,
+                    "Toggle mark items",
+                    "Input the item's position to toggle mark the chosen item:\nSeperate the values by commas (,) to toggle mark multiple items"
+                )
+
+                try:
+                    rows = resp.split(",")
+                    for row in rows: rows[rows.index(row)] = int(row)-1
+                    rows.sort()
+                    rows.reverse()
+
+                    for row in rows: self.CheckItem(self.GetItems()[row])
+
+                except IndexError as err:
+                    self.ErrorDialog("Couldn't find any items with those positions.")
+
+                except ValueError as err:
+                    if button==QInputDialog.DialogCode.Accepted:
+                        self.ErrorDialog("Those aren't numbers.\nPlease make sure you didn't include any whitespaces.")
+            else:
+                self.ErrorDialog("List is empty.")
     
     def RemoveItem(self,row:int):
         self.ClearSelection()
         self.items[row].object.setProperty("CREATION_TIME",None)
         self.items.pop(row)
         self.List.takeItem(row)
+        self.itemsChanged.emit(self.GetItems())
 
     def RemoveItems(self,items:list[QModelIndex]):
         if len(items)>0:
@@ -182,7 +215,7 @@ class MainWindow(ui,QObject):
             if self.List.count()>0:
                 resp,button = QInputDialog.getText(
                     self.window,
-                    "Remove item",
+                    "Remove items",
                     "Input the item's position to remove the chosen item:\nSeperate the values by commas (,) to remove multiple items"
                 )
 
@@ -191,8 +224,6 @@ class MainWindow(ui,QObject):
                     for row in rows: rows[rows.index(row)] = int(row)-1
                     rows.sort()
                     rows.reverse()
-
-                    print(rows)
 
                     for row in rows: self.RemoveItem(row)
 
@@ -209,6 +240,7 @@ class MainWindow(ui,QObject):
         if pd.__PyDist__._isBundle:
             for item in self.GetItems():
                 date = self.items[item].object.property("CREATION_TIME")
+                self.prefMng.SetSetting(["items"],{})
                 self.prefMng.SetSetting(["items",self.List.indexFromItem(item).row()],
                     {
                         "name": item.text(),

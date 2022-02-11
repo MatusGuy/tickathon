@@ -129,20 +129,26 @@ QPushButton#ClearButton:hover{
       <property name="contextMenuPolicy">
        <enum>Qt::CustomContextMenu</enum>
       </property>
+      <property name="tabKeyNavigation">
+       <bool>true</bool>
+      </property>
       <property name="dragEnabled">
        <bool>true</bool>
       </property>
+      <property name="dragDropOverwriteMode">
+       <bool>false</bool>
+      </property>
       <property name="dragDropMode">
-       <enum>QAbstractItemView::DragOnly</enum>
+       <enum>QAbstractItemView::DragDrop</enum>
       </property>
       <property name="defaultDropAction">
        <enum>Qt::MoveAction</enum>
       </property>
-      <property name="alternatingRowColors">
-       <bool>false</bool>
-      </property>
       <property name="selectionMode">
        <enum>QAbstractItemView::ContiguousSelection</enum>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectItems</enum>
       </property>
       <property name="spacing">
        <number>3</number>
@@ -174,14 +180,38 @@ QPushButton#ClearButton:hover{
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
+       <item row="4" column="0">
         <widget class="QLabel" name="CreationTimeLabel">
          <property name="text">
           <string>Creation time:</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="1" colspan="2">
+       <item row="2" column="0" colspan="4">
+        <widget class="Line" name="hSep1">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="IndexesLabel">
+         <property name="text">
+          <string>Selected indexes:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" colspan="3">
+        <widget class="QLineEdit" name="IndexesOutput">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1" colspan="3">
         <widget class="QDateTimeEdit" name="ItemCreationTime">
          <property name="enabled">
           <bool>false</bool>
@@ -194,37 +224,13 @@ QPushButton#ClearButton:hover{
          </property>
         </widget>
        </item>
-       <item row="0" column="1" colspan="2">
+       <item row="0" column="1" colspan="3">
         <widget class="QSpinBox" name="SelectedCount">
          <property name="readOnly">
           <bool>true</bool>
          </property>
          <property name="buttonSymbols">
           <enum>QAbstractSpinBox::NoButtons</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" colspan="3">
-        <widget class="Line" name="hSep1">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="IndexesLabel">
-         <property name="text">
-          <string>Indexes in list:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1" colspan="2">
-        <widget class="QLineEdit" name="IndexesOutput">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="readOnly">
-          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -293,7 +299,7 @@ QPushButton#ClearButton:hover{
     <string>Remove item(s)</string>
    </property>
    <property name="shortcut">
-    <string>Del, Backspace</string>
+    <string>Del</string>
    </property>
   </action>
   <action name="MarkAction">
@@ -320,7 +326,7 @@ QPushButton#ClearButton:hover{
     <string>Clear list</string>
    </property>
    <property name="shortcut">
-    <string>Shift+Del, Shift+Backspace</string>
+    <string>Shift+Del</string>
    </property>
   </action>
   <action name="AboutAction">
